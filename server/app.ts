@@ -3,7 +3,6 @@ import compression from 'compression'
 import router from './router'
 
 const app = express()
-
 app.use(compression())
 app.use(express.json())
 

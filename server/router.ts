@@ -7,4 +7,4 @@ export default router
   .get('/', (req, res) => {
     res.send('hello world')
   })
-  .get('/products', controllers.products.getProducts)
+  .get('/reviews/:product_id', controllers.getReviewsController)

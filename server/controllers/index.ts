@@ -1,5 +1,5 @@
-import products from './productsController'
+import { getReviewsController } from './getReviewsController'
 
 export default {
-  products,
+  getReviewsController,
 }
