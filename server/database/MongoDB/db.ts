@@ -29,7 +29,7 @@ metaModel.createCollection().then(function (collection) {
 })
 
 const reviewSchema = new mongoose.Schema({
-  id: Number,
+  review_id: Number,
   product_id: Number,
   rating: Object,
   date: Date,
