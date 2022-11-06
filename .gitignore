@@ -30,3 +30,9 @@ yarn-error.log*
 # personal notes
 NOTES.md
 TODO.md
+
+# seed data
+characteristic_reviews.csv
+characteristics.csv
+reviews_photos.csv
+reviews.csv

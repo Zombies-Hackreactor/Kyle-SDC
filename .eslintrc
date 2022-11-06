@@ -11,7 +11,8 @@
       "anonymous": "always",
       "named": "never",
       "asyncArrow": "always"
-    }]
+    }],
+    "@typescript-eslint/no-explicit-any": "off"
   },
   // Ignore the build files
   "ignorePatterns": ["dist"]

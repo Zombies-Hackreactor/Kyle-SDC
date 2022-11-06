@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model characteristic_reviews {
+  id                Int @id @default(autoincrement())
+  characteristic_id Int
+  review_id         Int
+  value             Int
+}
+
+model characteristics {
+  id         Int    @id @default(autoincrement())
+  product_id Int
+  name       String @db.VarChar(20)
+}
+
+model review_photos {
+  id        Int     @id @default(autoincrement())
+  review_id String  @db.VarChar(10)
+  url       String? @db.VarChar(10)
+}
+
+model reviews {
+  review_id   Int       @id @default(autoincrement())
+  product_id  Int
+  rating      Int
+  title       String    @db.VarChar(50)
+  text        String    @db.VarChar(500)
+  recommend   Boolean
+  response    String?   @db.VarChar(500)
+  date        DateTime? @db.Date
+  name        String?   @db.VarChar(30)
+  helpfulness Int?
+}

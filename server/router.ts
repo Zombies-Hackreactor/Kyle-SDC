@@ -8,3 +8,7 @@ export default router
     res.send('hello world')
   })
   .get('/reviews/:product_id', controllers.getReviewsController)
+  .get('/reviews/meta/:product_id', controllers.getMetaController)
+  .post('/reviews/post', controllers.addReviewController)
+  .put('/reviews/helpful/:review_id', controllers.incHelpfulnessController)
+  .put('/reviews/report/:review_id', controllers.reportReviewController)
