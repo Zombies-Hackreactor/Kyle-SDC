@@ -36,7 +36,10 @@ const reviewSchema = new mongoose.Schema({
   summary: String,
   body: String,
   recommend: Boolean,
-  reported: Boolean,
+  reported: {
+    type: Boolean,
+    default: false,
+  },
   name: String,
   email: String,
   response: String,
@@ -87,36 +90,3 @@ review_photosModel.createCollection().then(function (collection) {
 })
 
 export default db
-
-function getReviews(id: number, count = 5, sort = 'newest', cb: (data: object) => object) {
-  type Results = {
-    product?: number
-    count?: number
-    results?: object
-  }
-  const output: Results = {
-    product: id,
-    count: count,
-  }
-  if (sort === 'newest') {
-    reviewModel
-      .find({ product_id: id }, { _id: 0 }, { limit: count })
-      .sort({ date: -1 })
-      .then((results: object) => {
-        output.results = results
-      })
-    cb(output)
-  }
-  if (sort === 'helpful') {
-    reviewModel
-      .find({ product_id: id }, { _id: 0 }, { limit: count })
-      .sort({ helpfulness: -1 })
-      .then((results: object) => {
-        output.results = results
-      })
-    cb(output)
-  }
-  if (sort === 'relevant') {
-    cb(output)
-  }
-}

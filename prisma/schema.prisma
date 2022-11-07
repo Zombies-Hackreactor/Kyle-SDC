@@ -23,18 +23,20 @@ model characteristics {
 model review_photos {
   id        Int     @id @default(autoincrement())
   review_id String  @db.VarChar(10)
-  url       String? @db.VarChar(10)
+  url       String? @db.VarChar(200)
 }
 
 model reviews {
-  review_id   Int       @id @default(autoincrement())
-  product_id  Int
-  rating      Int
-  title       String    @db.VarChar(50)
-  text        String    @db.VarChar(500)
-  recommend   Boolean
-  response    String?   @db.VarChar(500)
-  date        DateTime? @db.Date
-  name        String?   @db.VarChar(30)
-  helpfulness Int?
+  review_id      Int     @id
+  product_id     Int
+  rating         Int
+  title          String  @db.VarChar(200)
+  text           String  @db.VarChar(500)
+  recommend      Boolean
+  response       String? @db.VarChar(500)
+  reviewer_name  String  @db.VarChar(30)
+  helpfulness    Int
+  reported       Boolean @default(false)
+  reviewer_email String  @db.VarChar(100)
+  date           BigInt
 }

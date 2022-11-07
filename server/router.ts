@@ -1,5 +1,6 @@
 import { Router } from 'express'
-import controllers from './controllers'
+import MDBcontrollers from './controllers/mongodb'
+import PSQLcontrollers from './controllers/postgreSQL'
 
 const router = Router()
 
@@ -7,8 +8,14 @@ export default router
   .get('/', (req, res) => {
     res.send('hello world')
   })
-  .get('/reviews/:product_id', controllers.getReviewsController)
-  .get('/reviews/meta/:product_id', controllers.getMetaController)
-  .post('/reviews/post', controllers.addReviewController)
-  .put('/reviews/helpful/:review_id', controllers.incHelpfulnessController)
-  .put('/reviews/report/:review_id', controllers.reportReviewController)
+  // .get('/reviews/:product_id', MDBcontrollers.getReviewsController)
+  // .get('/reviews/meta/:product_id', MDBcontrollers.getMetaController)
+  // .post('/reviews/post', MDBcontrollers.addReviewController)
+  // .put('/reviews/helpful/:review_id', MDBcontrollers.incHelpfulnessController)
+  // .put('/reviews/report/:review_id', MDBcontrollers.reportReviewController)
+
+  .get('/reviews/:product_id', PSQLcontrollers.getReviewsController)
+  .get('/reviews/meta/:product_id', PSQLcontrollers.getMetaController)
+  .post('/reviews/post', PSQLcontrollers.addReviewController)
+  .put('/reviews/helpful/:review_id', PSQLcontrollers.incHelpfulnessController)
+  .put('/reviews/report/:review_id', PSQLcontrollers.reportReviewController)

@@ -2,19 +2,21 @@ CREATE TABLE IF NOT EXISTS reviews (
   review_id SERIAL PRIMARY KEY NOT NULL,
   product_id INT NOT NULL,
   rating INT NOT NULL,
-  title VARCHAR(50) NOT NULL,
+  title VARCHAR(200) NOT NULL,
   text VARCHAR(500) NOT NULL,
   recommend BOOLEAN NOT NULL,
+  reported BOOLEAN DEFAULT FALSE,
   response VARCHAR(500),
-  date DATE,
-  name VARCHAR(30),
+  date bigint,
+  reviewer_name VARCHAR(30),
+  reviewer_email VARCHAR(100),
   helpfulness INT
 );
 
 CREATE TABLE IF NOT EXISTS review_photos (
 id SERIAL PRIMARY KEY NOT NULL,
 review_id VARCHAR(10) FOREIGN KEY NOT NULL,
-url VARCHAR(10) FOREIGN KEY
+url VARCHAR(200) FOREIGN KEY
 );
 
 CREATE TABLE IF NOT EXISTS characteristic_reviews (

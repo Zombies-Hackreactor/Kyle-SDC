@@ -1,4 +1,4 @@
-import { reviewModel } from '../database/MongoDB/db'
+import { reviewModel } from '../../database/MongoDB/db'
 
 export default async function addReview(formData: any, cb: any) {
   reviewModel
@@ -21,12 +21,11 @@ export default async function addReview(formData: any, cb: any) {
           date: Date.now(),
           review_id: newID,
         })
-        .then((err) => {
-          if (err) {
-            cb(err)
-          } else {
-            cb()
-          }
+        .catch((err) => {
+          cb(err)
+        })
+        .then(() => {
+          cb()
         })
     })
 }

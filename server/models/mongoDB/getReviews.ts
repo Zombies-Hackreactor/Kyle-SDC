@@ -1,5 +1,5 @@
 // import db from '../database/MongoDB/db'
-import { reviewModel } from '../database/MongoDB/db'
+import { reviewModel } from '../../database/MongoDB/db'
 
 export default async function getReviews(id: number, count = 5, sort = 'newest', cb: any) {
   type Results = {
