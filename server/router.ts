@@ -8,12 +8,15 @@ export default router
   .get('/', (req, res) => {
     res.send('hello world')
   })
+
+  // MONGODB
   // .get('/reviews/:product_id', MDBcontrollers.getReviewsController)
   // .get('/reviews/meta/:product_id', MDBcontrollers.getMetaController)
   // .post('/reviews/post', MDBcontrollers.addReviewController)
   // .put('/reviews/helpful/:review_id', MDBcontrollers.incHelpfulnessController)
   // .put('/reviews/report/:review_id', MDBcontrollers.reportReviewController)
 
+  // POSTGRESQL
   .get('/reviews/:product_id', PSQLcontrollers.getReviewsController)
   .get('/reviews/meta/:product_id', PSQLcontrollers.getMetaController)
   .post('/reviews/post', PSQLcontrollers.addReviewController)

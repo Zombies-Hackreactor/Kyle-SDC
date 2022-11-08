@@ -18,3 +18,5 @@ const myPool = new Pool({
 // \COPY characteristics(id, product_id, name) FROM '/Users/kyle/hackreactor/SDC/zombies/server/seed/characteristics.csv' DELIMITER ',' CSV HEADER;
 
 // \COPY characteristic_reviews(id, characteristic_id, review_id, value) FROM '/Users/kyle/hackreactor/SDC/zombies/server/seed/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
+
+// SELECT review_id, ARRAY_AGG (url) FROM review_photos GROUP BY review_id

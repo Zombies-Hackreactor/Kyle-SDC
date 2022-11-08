@@ -31,12 +31,22 @@ export async function getReviews(id: number, count = 5, sort = 'newest', cb: any
   }
   if (sort === 'newest') {
     // put newest query here
-    db.query(
-      `SELECT review_id,product_id, rating, title, text, recommend, response, reviewer_name, helpfulness, reported, reviewer_email, TO_TIMESTAMP(date/1000) AS date FROM reviews WHERE product_id = ${id} ORDER BY date DESC`,
-      (err, result) => {
-        cb(result.rows)
-      }
+    const reviews: any = await db.query(
+      `SELECT review_id,product_id, rating, title, text, recommend, response, reviewer_name, helpfulness, reported, reviewer_email, TO_TIMESTAMP(date/1000) AS date FROM reviews WHERE product_id = ${id} ORDER BY date DESC`
     )
+    const photos = await Promise.all(
+      reviews.rows.map(async (review: any, index: number) => {
+        const outcome = await db.query(
+          `SELECT review_id, COALESCE (json_agg( json_build_object ('id', id, 'url', url)), '[]') FROM review_photos WHERE review_id = ${review.review_id} GROUP BY review_id`
+        )
+        if (outcome.rows.length === 0) {
+          reviews.rows[index].photos = []
+        } else {
+          reviews.rows[index].photos = outcome.rows[0].coalesce
+        }
+      })
+    )
+    cb(reviews.rows)
   }
   if (sort === 'helpful') {
     db.query(
@@ -81,6 +91,9 @@ export async function addReview(formData: any, cb: any) {
         ${Date.now()},
         ${newID})`
       )
+      db.query(
+        `INSERT INTO review_photos (photos, review_id) VALUES (${formData.photos}, ${newID})`
+      )
     })
     .catch((err: any) => {
       console.log('err', err)
@@ -102,10 +115,10 @@ export async function reportReview(id: number, cb: any) {
     })
 }
 
-// export async function getMeta(id: number, cb: any) {}
+export async function getMeta(id: number, cb: any) {}
 
 export default {
-  // getMeta,
+  getMeta,
   getReviews,
   addReview,
   incHelpfulness,

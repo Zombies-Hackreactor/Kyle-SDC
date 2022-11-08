@@ -7,7 +7,7 @@ app.listen(port, () =>
   console.log(`Server started on http://localhost:${port} in ${process.env.NODE_ENV} mode`)
 )
 
-console.log('connected to db, models: ', db.models)
+// console.log('connected to db, models: ', db.models)
 
 // metaModel.create({
 //   product_id: 1,
