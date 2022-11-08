@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   product_id INT NOT NULL,
   rating INT NOT NULL,
   title VARCHAR(200) NOT NULL,
-  text VARCHAR(500) NOT NULL,
+  text VARCHAR(1000) NOT NULL,
   recommend BOOLEAN NOT NULL,
   reported BOOLEAN DEFAULT FALSE,
   response VARCHAR(500),

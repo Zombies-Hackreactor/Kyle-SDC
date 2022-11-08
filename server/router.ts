@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import MDBcontrollers from './controllers/mongodb'
-import PSQLcontrollers from './controllers/postgreSQL'
+import PSQLcontrollers from './controllers/psql'
 
 const router = Router()
 
