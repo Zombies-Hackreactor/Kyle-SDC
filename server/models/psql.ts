@@ -3,11 +3,11 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const db = new Client({
-  host: 'localhost',
-  user: 'postgres',
-  port: 5432,
-  database: 'SDC',
+const db: any = new Client({
+  host: process.env.HOST,
+  user: process.env.USER,
+  port: process.env.DBPORT,
+  database: process.env.DBNAME,
   password: process.env.DBPASS,
 })
 
@@ -32,9 +32,9 @@ export async function getReviews(id: number, count = 5, sort = 'newest', cb: any
   if (sort === 'newest') {
     // put newest query here
     const reviews: any = await db.query(
-      `SELECT review_id,product_id, rating, title, text, recommend, response, reviewer_name, helpfulness, reported, reviewer_email, TO_TIMESTAMP(date/1000) AS date FROM reviews WHERE product_id = ${id} ORDER BY date DESC`
+      `SELECT review_id,product_id, rating, title, text, recommend, response, reviewer_name, helpfulness, reviewer_email, TO_TIMESTAMP(date/1000) AS date FROM reviews WHERE product_id = ${id} ORDER BY date DESC`
     )
-    const photos = await Promise.all(
+    await Promise.all(
       reviews.rows.map(async (review: any, index: number) => {
         const outcome = await db.query(
           `SELECT review_id, COALESCE (json_agg( json_build_object ('id', id, 'url', url)), '[]') FROM review_photos WHERE review_id = ${review.review_id} GROUP BY review_id`
@@ -49,13 +49,21 @@ export async function getReviews(id: number, count = 5, sort = 'newest', cb: any
     cb(reviews.rows)
   }
   if (sort === 'helpful') {
-    db.query(
-      `SELECT review_id,product_id, rating, title, text, recommend, response, reviewer_name, helpfulness, reported, reviewer_email, TO_TIMESTAMP(date/1000) AS timestamp FROM reviews WHERE product_id = ${id} ORDER BY helpfulness DESC`,
-      (err, result) => {
-        cb(result.rows)
-      }
+    const reviews: any = db.query(
+      `SELECT review_id,product_id, rating, title, text, recommend, response, reviewer_name, helpfulness, reviewer_email, TO_TIMESTAMP(date/1000) AS timestamp FROM reviews WHERE product_id = ${id} ORDER BY helpfulness DESC`
     )
-    cb(output)
+    await Promise.all(
+      reviews.rows.map(async (review: any, index: number) => {
+        const outcome = await db.query(
+          `SELECT review_id, COALESCE (json_agg( json_build_object ('id', id, 'url', url)), '[]') FROM review_photos WHERE review_id = ${review.review_id} GROUP BY review_id`
+        )
+        if (outcome.rows.length === 0) {
+          reviews.rows[index].photos = []
+        } else {
+          reviews.rows[index].photos = outcome.rows[0].coalesce
+        }
+      })
+    )
   }
   if (sort === 'relevant') {
     // put relevant query here
@@ -91,9 +99,7 @@ export async function addReview(formData: any, cb: any) {
         ${Date.now()},
         ${newID})`
       )
-      db.query(
-        `INSERT INTO review_photos (photos, review_id) VALUES (${formData.photos}, ${newID})`
-      )
+      db.query(`INSERT INTO review_photos (url, review_id) VALUES (${formData.photos}, ${newID})`)
     })
     .catch((err: any) => {
       console.log('err', err)
@@ -115,7 +121,40 @@ export async function reportReview(id: number, cb: any) {
     })
 }
 
-export async function getMeta(id: number, cb: any) {}
+export async function getMeta(id: number, cb: any) {
+  const output: any = {
+    product_id: id,
+    ratings: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    },
+    recommended: {},
+    characteristics: {},
+  }
+  const ratings = await db.query(`SELECT rating FROM reviews WHERE product_id = ${id}`)
+  ratings.rows.map((review) => {
+    output.ratings[String(review.rating)]++
+  })
+  const recommend = await db.query(
+    `SELECT product_id, COALESCE(JSON_BUILD_OBJECT(true, COUNT(*) filter (where recommend), false, COUNT(*) filter (where not recommend))) FROM reviews WHERE product_id = ${id} GROUP BY product_id`
+  )
+  if (recommend.rows.length !== 0) {
+    output.recommended = recommend.rows[0].coalesce
+  }
+  const characteristics = await db.query(`SELECT * FROM characteristics WHERE product_id = ${id}`)
+  await Promise.all(
+    characteristics.rows.map(async (char: any) => {
+      const characteristic_reviews = await db.query(
+        `SELECT characteristic_id AS id, AVG(value) AS value FROM characteristic_reviews WHERE characteristic_id = ${char.id} GROUP BY characteristic_id`
+      )
+      output.characteristics[char.name] = characteristic_reviews.rows[0]
+    })
+  )
+  cb(output)
+}
 
 export default {
   getMeta,

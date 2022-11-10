@@ -8,10 +8,3 @@ app.listen(port, () =>
 )
 
 // console.log('connected to db, models: ', db.models)
-
-// metaModel.create({
-//   product_id: 1,
-//   ratings: { 1: 2, 2: 3, 3: 4, 4: 5, 5: 6 },
-//   recommended: { true: 4, false: 5 },
-//   characteristics: { 1: 3 },
-// })
