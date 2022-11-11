@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const db: any = new Client({
+const db = new Client({
   host: process.env.HOST,
   user: process.env.USER,
   port: process.env.DBPORT,
@@ -11,7 +11,8 @@ const db: any = new Client({
   password: process.env.DBPASS,
 })
 
-db.connect((err) => {
+
+db.connect((err: any) => {
   if (err) {
     console.error('connection error', err.stack)
   } else {
