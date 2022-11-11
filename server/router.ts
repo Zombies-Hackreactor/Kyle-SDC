@@ -5,7 +5,7 @@ import PSQLcontrollers from './controllers/psql'
 const router = Router()
 
 export default router
-  .get('/', (req, res) => {
+  .get('/', (req: any, res: any) => {
     res.send('hello world')
   })
 

@@ -3,14 +3,20 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const db = new Client({
-  host: process.env.HOST,
-  user: process.env.USER,
-  port: process.env.DBPORT,
-  database: process.env.DBNAME,
-  password: process.env.DBPASS,
+// const db = new Client({
+//   host: process.env.HOST,
+//   user: process.env.USER,
+//   port: process.env.DBPORT,
+//   database: process.env.DBNAME,
+//   password: process.env.DBPASS,
+// })
+const db = new Pool({
+  host: 'localhost',
+  user: 'postgres',
+  port: 5432,
+  database: 'SDC',
+  password: 'PASSWORD',
 })
-
 
 db.connect((err: any) => {
   if (err) {
@@ -136,7 +142,7 @@ export async function getMeta(id: number, cb: any) {
     characteristics: {},
   }
   const ratings = await db.query(`SELECT rating FROM reviews WHERE product_id = ${id}`)
-  ratings.rows.map((review) => {
+  ratings.rows.map((review: any) => {
     output.ratings[String(review.rating)]++
   })
   const recommend = await db.query(
