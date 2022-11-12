@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-// const db = new Client({
+// const db = new Pool({
 //   host: process.env.HOST,
 //   user: process.env.USER,
 //   port: process.env.DBPORT,

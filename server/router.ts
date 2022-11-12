@@ -17,7 +17,7 @@ export default router
   // .put('/reviews/report/:review_id', MDBcontrollers.reportReviewController)
 
   // POSTGRESQL
-  .get('/reviews/:product_id', PSQLcontrollers.getReviewsController)
+  .get('/reviews', PSQLcontrollers.getReviewsController)
   .get('/reviews/meta/:product_id', PSQLcontrollers.getMetaController)
   .post('/reviews/post', PSQLcontrollers.addReviewController)
   .put('/reviews/helpful/:review_id', PSQLcontrollers.incHelpfulnessController)

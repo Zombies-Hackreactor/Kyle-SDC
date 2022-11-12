@@ -1,7 +1,7 @@
 import { getReviews, incHelpfulness, getMeta, addReview, reportReview } from '../models/psql'
 
 export const getReviewsController = (req: Request, res: Response) => {
-  getReviews(req.params.product_id, req.params.count, req.params.sort, (result: any) => {
+  getReviews(req.query.product_id, req.query.count, req.query.sort, (result: any) => {
     res.status(200).json(result)
   })
 }
