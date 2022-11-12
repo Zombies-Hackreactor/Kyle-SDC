@@ -3,20 +3,20 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-// const db = new Pool({
-//   host: process.env.HOST,
-//   user: process.env.USER,
-//   port: process.env.DBPORT,
-//   database: process.env.DBNAME,
-//   password: process.env.DBPASS,
-// })
 const db = new Pool({
-  host: 'localhost',
-  user: 'postgres',
-  port: 5432,
-  database: 'SDC',
-  password: 'PASSWORD',
+  host: process.env.HOST,
+  user: process.env.USER,
+  port: process.env.DBPORT,
+  database: process.env.DBNAME,
+  password: process.env.DBPASS,
 })
+// const db = new Pool({
+//   host: 'localhost',
+//   user: 'postgres',
+//   port: 5432,
+//   database: 'SDC',
+//   password: 'PASSWORD',
+// })
 
 db.connect((err: any) => {
   if (err) {
